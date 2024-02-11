@@ -1,0 +1,4 @@
+enum MessageOrderType{
+  connect,
+  type,
+}
