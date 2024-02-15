@@ -36,7 +36,11 @@ class _HomePageState extends State<HomePage> {
           height: 50,
           child: TextField(
             onChanged: (val) async {
-              //TODO: Kontrol ekle otomatik tamamlama kullanılmış mı kullanıldıysa parçala vs.
+              print(val);
+              print(_previousValue);
+              if(val.length - _previousValue.length > 1) {
+                print(val.substring(val.length - _previousValue.length));
+              }
               if (val.length > _previousValue.length) {
                 await SocketHelper.sendMessage(MessageModel(orderType: MessageOrderType.type, message: val.substring(val.length - 1)), connection.hostAddress);
               } else if (val.length < _previousValue.length) {

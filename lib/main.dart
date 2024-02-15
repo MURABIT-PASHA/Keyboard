@@ -20,7 +20,7 @@ class Keyboard extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: ConnectionStateChecker()),
+          home: const ConnectionStateChecker()),
     );
   }
 }
