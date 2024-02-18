@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard/connection_provider.dart';
 import 'package:keyboard/empty_page.dart';
-import 'package:keyboard/home_page.dart';
+import 'package:keyboard/keyboard_layout.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -32,6 +32,6 @@ class ConnectionStateChecker extends StatelessWidget {
   Widget build(BuildContext context) {
     final connectionStatus =
         Provider.of<ConnectionProvider>(context, listen: true);
-    return connectionStatus.isConnected ? const HomePage() : const EmptyPage();
+    return connectionStatus.isConnected ? const KeyboardLayoutWidget() : const EmptyPage();
   }
 }

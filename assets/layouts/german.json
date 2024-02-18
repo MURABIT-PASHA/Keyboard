@@ -1,0 +1,73 @@
+{
+  "1. Satır": [
+    {"Esc": {"shift": "001B", "ctrl": "001B"}},
+    {"1": { "shift": "!"}},
+    {"2": { "shift": "\"", "alt_gr": "²"}},
+    {"3": { "shift": "§", "alt_gr": "³"}},
+    {"4": { "shift": "$"}},
+    {"5": { "shift": "%"}},
+    {"6": { "shift": "&"}},
+    {"7": { "shift": "/", "alt_gr": "{"}},
+    {"8": { "shift": "(", "alt_gr": "["}},
+    {"9": { "shift": ")", "alt_gr": "]"}},
+    {"0": { "shift": "=", "alt_gr": "}"}},
+    {"ß": { "shift": "?", "alt_gr": "\\", "shift_alt_gr": "ẞ"}},
+    {"´": { "shift": "`"}},
+    {"Backspace": {"normal": "\u0008", "shift": "\u0008", "alt_gr": ""}}
+  ],
+  "2. Satır": [
+    {"Tab": {"normal": "\u0009", "shift": "\u0009"}},
+    {"q": { "shift": "Q", "alt_gr": "@"}},
+    {"w": { "shift": "W"}},
+    {"e": { "shift": "E", "alt_gr": "€"}},
+    {"r": { "shift": "R"}},
+    {"t": { "shift": "T"}},
+    {"z": { "shift": "Z"}},
+    {"u": { "shift": "U"}},
+    {"i": { "shift": "I"}},
+    {"o": { "shift": "O"}},
+    {"p": { "shift": "P"}},
+    {"ü": { "shift": "Ü"}},
+    {"Enter": {}}
+  ],
+  "3. Satır": [
+    {"Caps Lock": {}},
+    {"a": { "shift": "A"}},
+    {"s": { "shift": "S"}},
+    {"d": { "shift": "D"}},
+    {"f": { "shift": "F"}},
+    {"g": { "shift": "G"}},
+    {"h": { "shift": "H"}},
+    {"j": { "shift": "J"}},
+    {"k": { "shift": "K"}},
+    {"l": { "shift": "L"}},
+    {"ö": { "shift": "Ö"}},
+    {"ä": { "shift": "Ä"}},
+    {"#": { "shift": "'"}}
+  ],
+  "4. Satır": [
+    {"Shift": {}},
+    {"<": { "shift": ">", "alt_gr": "|"}},
+    {"y": { "shift": "Y"}},
+    {"x": { "shift": "X"}},
+    {"c": { "shift": "C"}},
+    {"v": { "shift": "V"}},
+    {"b": { "shift": "B"}},
+    {"n": { "shift": "N"}},
+    {"m": { "shift": "M", "alt_gr": "µ"}},
+    {",": { "shift": ";"}},
+    {".": { "shift": ":"}},
+    {"-": { "shift": "_"}},
+    {"Shift": {}}
+  ],
+  "5. Satır": [
+    {"Ctrl": {}},
+    {"Win": {}},
+    {"Alt": {}},
+    {"Space": {}},
+    {"AltGr": {}},
+    {"Win": {}},
+    {"Menu": {}},
+    {"Ctrl": {}}
+  ]
+}
