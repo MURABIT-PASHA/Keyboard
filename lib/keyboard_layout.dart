@@ -17,6 +17,16 @@ class KeyboardLayoutWidget extends StatefulWidget {
 class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
   final KeyboardLayoutHelper helper = KeyboardLayoutHelper();
   List<String> specialKey = [];
+  final List<Locale> locales = [
+    Locale('tr'),
+    Locale('ar'),
+    Locale('de'),
+    Locale('ru'),
+    Locale('kk'),
+    Locale('en'),
+  ];
+  int index = 0;
+
   @override
   void initState() {
     super.initState();
@@ -48,11 +58,17 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
               connection.updateConnectionStatus(false);
             },
             icon: const Icon(Icons.private_connectivity_outlined),
-          )
+          ),
+          IconButton(
+            onPressed: () {
+              //TODO: Open customize menu
+            },
+            icon: const Icon(Icons.settings),
+          ),
         ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: helper.getKeyboardLayout(const Locale('tr')),
+        future: helper.getKeyboardLayout(locales[index]),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final data = snapshot.data!;
@@ -64,8 +80,14 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
             List<Widget> columnChildren = data.entries.map((entry) {
               int specialKeysCount = entry.value.where((button) {
                 final keyLabel = button.keys.first;
-                return ['Shift', 'Backspace', 'Tab', 'Enter', 'Caps Lock', 'Space']
-                    .contains(keyLabel);
+                return [
+                  'Shift',
+                  'Backspace',
+                  'Tab',
+                  'Enter',
+                  'Caps Lock',
+                  'Space'
+                ].contains(keyLabel);
               }).length;
               double standardWidth = baseWidth - 1;
               double gaps = entry.value.length * 0.5;
@@ -75,8 +97,14 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
                   specialKeysCount > 0 ? extraWidth / specialKeysCount : 0;
               List<Widget> rowChildren = entry.value.map<Widget>((button) {
                 final keyLabel = button.keys.first;
-                bool isSpecialKey = ['Shift', 'Backspace', 'Tab', 'Enter', 'Caps Lock', 'Space']
-                    .contains(keyLabel);
+                bool isSpecialKey = [
+                  'Shift',
+                  'Backspace',
+                  'Tab',
+                  'Enter',
+                  'Caps Lock',
+                  'Space'
+                ].contains(keyLabel);
                 double keyWidth = isSpecialKey
                     ? standardWidth + extraWidthPerSpecialKey
                     : standardWidth;
@@ -129,6 +157,27 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
       onLongPressEnd: (details) {
         specialKey.clear();
       },
+      onHorizontalDragEnd: (DragEndDetails details) {
+        if (keyLabel == 'Space') {
+          if(details.velocity.pixelsPerSecond.dx>1000){
+            setState(() {
+              if(index != 5) {
+                index = index + 1;
+              }else{
+                index = 0;
+              }
+            });
+          }else if(details.velocity.pixelsPerSecond.dx<-1000){
+            setState(() {
+              if(index != 0) {
+                index = index - 1;
+              }else{
+                index = 5;
+              }
+            });
+          }
+        }
+      },
       child: AnimatedContainer(
         margin: const EdgeInsets.only(left: 0.25, right: 0.25),
         duration: const Duration(milliseconds: 100),
@@ -161,30 +210,27 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
             Positioned.fill(
               child: Align(
                 alignment: Alignment.center,
-                child: Builder(
-                  builder: (context) {
-                    if(keyLabel == 'Space'){
-                      return const Icon(Icons.space_bar);
-                    }else if(keyLabel == 'Tab'){
-                      return const Icon(Icons.keyboard_tab);
-                    }else if(keyLabel == 'Backspace'){
-                      return const Icon(Icons.keyboard_backspace);
-                    }else if(keyLabel == 'Enter'){
-                      return const Icon(Icons.keyboard_return);
-                    }else if(keyLabel == 'Win'){
-                      return const Icon(Icons.window_sharp);
-                    }else if(keyLabel == 'Menu'){
-                      return const Icon(Icons.menu);
-                    }else{
-                      return Text(
-                        keyLabel,
-                        style: const TextStyle(fontSize: 15),
-                        maxLines: 1,
-                      );
-                    }
-
+                child: Builder(builder: (context) {
+                  if (keyLabel == 'Space') {
+                    return const Icon(Icons.space_bar);
+                  } else if (keyLabel == 'Tab') {
+                    return const Icon(Icons.keyboard_tab);
+                  } else if (keyLabel == 'Backspace') {
+                    return const Icon(Icons.keyboard_backspace);
+                  } else if (keyLabel == 'Enter') {
+                    return const Icon(Icons.keyboard_return);
+                  } else if (keyLabel == 'Win') {
+                    return const Icon(Icons.window_sharp);
+                  } else if (keyLabel == 'Menu') {
+                    return const Icon(Icons.menu);
+                  } else {
+                    return Text(
+                      keyLabel,
+                      style: const TextStyle(fontSize: 15),
+                      maxLines: 1,
+                    );
                   }
-                ),
+                }),
               ),
             ),
             if (functions.containsKey('alt_gr'))

@@ -16,7 +16,7 @@ class Keyboard extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (BuildContext context) => ConnectionProvider(),
       child: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Keyboard',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),

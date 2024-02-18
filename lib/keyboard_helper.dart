@@ -10,7 +10,7 @@ class KeyboardLayoutHelper {
     'de': 'assets/layouts/german.json',
     'ru': 'assets/layouts/russian.json',
     'kk': 'assets/layouts/kazakh.json',
-    'en': 'assets/layouts/english.json',
+    'en': 'assets/layouts/turkish.json', //TODO: Add English
   };
 
   Future<Map<String, dynamic>> getKeyboardLayout(Locale locale) async {
