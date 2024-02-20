@@ -49,86 +49,93 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final connection = Provider.of<ConnectionProvider>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Keyboard"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              connection.updateHostAddress('NULL');
-            },
-            icon: const Icon(Icons.private_connectivity_outlined),
-          ),
-          IconButton(
-            onPressed: () {
-              //TODO: Open customize menu
-            },
-            icon: const Icon(Icons.settings),
-          ),
-        ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.light,
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: helper.getKeyboardLayout(locales[index]),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data!;
-            final maxKeys = data.values.fold<int>(
-                0, (max, item) => item.length > max ? item.length : max);
-            final baseWidth = screenWidth / maxKeys;
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Keyboard"),
+          actions: [
+            IconButton(
+              onPressed: () {
+                connection.updateHostAddress('NULL');
+              },
+              icon: const Icon(Icons.private_connectivity_outlined),
+            ),
+            IconButton(
+              onPressed: () {
+                //TODO: Open customize menu
+              },
+              icon: const Icon(Icons.settings),
+            ),
+          ],
+        ),
+        body: FutureBuilder<Map<String, dynamic>>(
+          future: helper.getKeyboardLayout(locales[index]),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final data = snapshot.data!;
+              final maxKeys = data.values.fold<int>(
+                  0, (max, item) => item.length > max ? item.length : max);
+              final baseWidth = screenWidth / maxKeys;
 
-            final hostAddress = connection.hostAddress;
-            List<Widget> columnChildren = data.entries.map((entry) {
-              int specialKeysCount = entry.value.where((button) {
-                final keyLabel = button.keys.first;
-                return [
-                  'Shift',
-                  'Backspace',
-                  'Tab',
-                  'Enter',
-                  'Caps Lock',
-                  'Space'
-                ].contains(keyLabel);
-              }).length;
-              double standardWidth = baseWidth - 1;
-              double gaps = entry.value.length * 0.5;
-              double extraWidth =
-                  screenWidth - (entry.value.length * standardWidth) - gaps;
-              double extraWidthPerSpecialKey =
-                  specialKeysCount > 0 ? extraWidth / specialKeysCount : 0;
-              List<Widget> rowChildren = entry.value.map<Widget>((button) {
-                final keyLabel = button.keys.first;
-                bool isSpecialKey = [
-                  'Shift',
-                  'Backspace',
-                  'Tab',
-                  'Enter',
-                  'Caps Lock',
-                  'Space'
-                ].contains(keyLabel);
-                double keyWidth = isSpecialKey
-                    ? standardWidth + extraWidthPerSpecialKey
-                    : standardWidth;
-                return createKey(button, keyWidth, hostAddress);
+              final hostAddress = connection.hostAddress;
+              List<Widget> columnChildren = data.entries.map((entry) {
+                int specialKeysCount = entry.value.where((button) {
+                  final keyLabel = button.keys.first;
+                  return [
+                    'Shift',
+                    'Backspace',
+                    'Tab',
+                    'Enter',
+                    'Caps Lock',
+                    'Space'
+                  ].contains(keyLabel);
+                }).length;
+                double standardWidth = baseWidth - 1;
+                double gaps = entry.value.length * 0.5;
+                double extraWidth =
+                    screenWidth - (entry.value.length * standardWidth) - gaps;
+                double extraWidthPerSpecialKey =
+                    specialKeysCount > 0 ? extraWidth / specialKeysCount : 0;
+                List<Widget> rowChildren = entry.value.map<Widget>((button) {
+                  final keyLabel = button.keys.first;
+                  bool isSpecialKey = [
+                    'Shift',
+                    'Backspace',
+                    'Tab',
+                    'Enter',
+                    'Caps Lock',
+                    'Space'
+                  ].contains(keyLabel);
+                  double keyWidth = isSpecialKey
+                      ? standardWidth + extraWidthPerSpecialKey
+                      : standardWidth;
+                  return createKey(button, keyWidth, hostAddress);
+                }).toList();
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: rowChildren,
+                );
               }).toList();
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: rowChildren,
-              );
-            }).toList();
 
-            return SizedBox(
-              width: screenWidth,
-              height: 400,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: columnChildren,
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          return const CircularProgressIndicator();
-        },
+              return SizedBox(
+                width: screenWidth,
+                height: 400,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: columnChildren,
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
       ),
     );
   }
@@ -138,19 +145,7 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
     final keyLabel = function.keys.first;
     final functions = function[keyLabel];
     return GestureDetector(
-      onTap: () async {
-        if (specialKey.isNotEmpty) {
-          await SocketHelper.sendMessage(
-              MessageModel(
-                  orderType: MessageOrderType.type,
-                  message: "${specialKey.first}+$keyLabel"),
-              hostAddress);
-        } else {
-          await SocketHelper.sendMessage(
-              MessageModel(orderType: MessageOrderType.type, message: keyLabel),
-              hostAddress);
-        }
-      },
+
       onLongPressStart: (details) {
         specialKey.add(keyLabel.toLowerCase());
       },
@@ -159,7 +154,7 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
       },
       onHorizontalDragEnd: (DragEndDetails details) {
         if (keyLabel == 'Space') {
-          if(details.velocity.pixelsPerSecond.dx>1000){
+          if(details.velocity.pixelsPerSecond.dx>500){
             setState(() {
               if(index != 5) {
                 index = index + 1;
@@ -167,7 +162,7 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
                 index = 0;
               }
             });
-          }else if(details.velocity.pixelsPerSecond.dx<-1000){
+          }else if(details.velocity.pixelsPerSecond.dx<-500){
             setState(() {
               if(index != 0) {
                 index = index - 1;
@@ -178,72 +173,99 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
           }
         }
       },
-      child: AnimatedContainer(
-        margin: const EdgeInsets.only(left: 0.25, right: 0.25),
-        duration: const Duration(milliseconds: 100),
-        width: width,
-        height: 50,
-        decoration: BoxDecoration(
+      child: InkWell(
+        customBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue.shade500, Colors.blue.shade900],
-          ),
-          border: Border.all(
-            color: Colors.blueGrey,
-            width: 1,
-          ),
         ),
-        child: Stack(
-          children: [
-            if (functions.containsKey('shift'))
-              Positioned(
-                top: 5,
-                left: 8,
-                child: Text(
-                  functions['shift'],
-                  style: const TextStyle(fontSize: 9),
-                  maxLines: 1,
+        onTap: () async {
+          if (specialKey.isNotEmpty) {
+            await SocketHelper.sendMessage(
+                MessageModel(
+                    orderType: MessageOrderType.type,
+                    message: "${specialKey.first}+$keyLabel"),
+                hostAddress);
+          } else {
+            await SocketHelper.sendMessage(
+                MessageModel(orderType: MessageOrderType.type, message: keyLabel),
+                hostAddress);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 0.25, right: 0.25),
+          child: Ink(
+            width: width - 0.5,
+            height: 50,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 4,
+                  blurRadius: 7,
+                  offset: const Offset(0, 5),
                 ),
+              ],
+              borderRadius: BorderRadius.circular(25),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.blue.shade500, Colors.blue.shade900],
               ),
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.center,
-                child: Builder(builder: (context) {
-                  if (keyLabel == 'Space') {
-                    return const Icon(Icons.space_bar);
-                  } else if (keyLabel == 'Tab') {
-                    return const Icon(Icons.keyboard_tab);
-                  } else if (keyLabel == 'Backspace') {
-                    return const Icon(Icons.keyboard_backspace);
-                  } else if (keyLabel == 'Enter') {
-                    return const Icon(Icons.keyboard_return);
-                  } else if (keyLabel == 'Win') {
-                    return const Icon(Icons.window_sharp);
-                  } else if (keyLabel == 'Menu') {
-                    return const Icon(Icons.menu);
-                  } else {
-                    return Text(
-                      keyLabel,
-                      style: const TextStyle(fontSize: 15),
-                      maxLines: 1,
-                    );
-                  }
-                }),
+              border: Border.all(
+                color: Colors.blueGrey,
+                width: 1,
               ),
             ),
-            if (functions.containsKey('alt_gr'))
-              Positioned(
-                bottom: 5,
-                right: 8,
-                child: Text(
-                  functions['alt_gr'],
-                  style: const TextStyle(fontSize: 9),
-                  maxLines: 1,
+            child: Stack(
+              children: [
+                if (functions.containsKey('shift'))
+                  Positioned(
+                    top: 5,
+                    left: 8,
+                    child: Text(
+                      functions['shift'],
+                      style: const TextStyle(fontSize: 9),
+                      maxLines: 1,
+                    ),
+                  ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Builder(builder: (context) {
+                      if (keyLabel == 'Space') {
+                        return const Icon(Icons.space_bar);
+                      } else if (keyLabel == 'Tab') {
+                        return const Icon(Icons.keyboard_tab);
+                      } else if (keyLabel == 'Backspace') {
+                        return const Icon(Icons.keyboard_backspace);
+                      } else if (keyLabel == 'Enter') {
+                        return const Icon(Icons.keyboard_return);
+                      } else if (keyLabel == 'Win') {
+                        return const Icon(Icons.window_sharp);
+                      } else if (keyLabel == 'Menu') {
+                        return const Icon(Icons.menu);
+                      } else {
+                        return Text(
+                          keyLabel,
+                          style: const TextStyle(fontSize: 15),
+                          maxLines: 1,
+                        );
+                      }
+                    }),
+                  ),
                 ),
-              ),
-          ],
+                if (functions.containsKey('alt_gr'))
+                  Positioned(
+                    bottom: 5,
+                    right: 8,
+                    child: Text(
+                      functions['alt_gr'],
+                      style: const TextStyle(fontSize: 9),
+                      maxLines: 1,
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );
