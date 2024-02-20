@@ -3,6 +3,8 @@ import 'package:keyboard/connection_provider.dart';
 import 'package:keyboard/empty_page.dart';
 import 'package:keyboard/keyboard_layout.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 void main() {
   runApp(const Keyboard());
@@ -16,11 +18,12 @@ class Keyboard extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (BuildContext context) => ConnectionProvider(),
       child: MaterialApp(
-          title: 'Keyboard',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: const ConnectionStateChecker()),
+        title: 'Keyboard',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const ConnectionStateChecker(),
+      ),
     );
   }
 }
@@ -32,6 +35,13 @@ class ConnectionStateChecker extends StatelessWidget {
   Widget build(BuildContext context) {
     final connectionStatus =
         Provider.of<ConnectionProvider>(context, listen: true);
-    return connectionStatus.isConnected ? const KeyboardLayoutWidget() : const EmptyPage();
+    return FutureBuilder(
+      future: connectionStatus.checkHostAddress(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return connectionStatus.isConnected
+            ? const KeyboardLayoutWidget()
+            : const EmptyPage();
+      },
+    );
   }
 }

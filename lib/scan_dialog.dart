@@ -32,6 +32,9 @@ class _ScanDialogState extends State<ScanDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final connectionStatus =
+    Provider.of<ConnectionProvider>(context, listen: true);
+    connectionStatus.checkHostAddress().then((value) => print(value));
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       child: Container(

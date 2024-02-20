@@ -18,12 +18,12 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
   final KeyboardLayoutHelper helper = KeyboardLayoutHelper();
   List<String> specialKey = [];
   final List<Locale> locales = [
-    Locale('tr'),
-    Locale('ar'),
-    Locale('de'),
-    Locale('ru'),
-    Locale('kk'),
-    Locale('en'),
+    const Locale('tr'),
+    const Locale('ar'),
+    const Locale('de'),
+    const Locale('ru'),
+    const Locale('kk'),
+    const Locale('en'),
   ];
   int index = 0;
 
@@ -55,7 +55,7 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
         actions: [
           IconButton(
             onPressed: () {
-              connection.updateConnectionStatus(false);
+              connection.updateHostAddress('NULL');
             },
             icon: const Icon(Icons.private_connectivity_outlined),
           ),
