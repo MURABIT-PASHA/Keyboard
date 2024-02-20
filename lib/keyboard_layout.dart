@@ -68,7 +68,46 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
           ],
         ),
         drawer: Drawer(
-          //TODO: Open customize menu
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(25),
+              bottomRight: Radius.circular(25),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(25),
+              bottomRight: Radius.circular(25),
+            ),
+            child: ListView(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Icon(
+                  Icons.palette,
+                  color: Colors.red.shade900,
+                  size: 75,
+                ),
+                const Text("Tema", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                const Divider(
+                  indent: 15,
+                  endIndent: 15,
+                  height: 5,
+                  color: Colors.grey,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  height: 100,
+                  child: const Text('Çok yakında sizlerle demek isterdim ama değil maalesef.\nYani daha ne yapayım ücretsiz, reklamsız uygulama işte.'),
+                ),
+                //TODO: Add theme here
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
         ),
         body: FutureBuilder<Map<String, dynamic>>(
           future: helper.getKeyboardLayout(locales[index]),
@@ -142,7 +181,6 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
     final keyLabel = function.keys.first;
     final functions = function[keyLabel];
     return GestureDetector(
-
       onLongPressStart: (details) {
         specialKey.add(keyLabel.toLowerCase());
       },
@@ -151,19 +189,19 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
       },
       onHorizontalDragEnd: (DragEndDetails details) {
         if (keyLabel == 'Space') {
-          if(details.velocity.pixelsPerSecond.dx>500){
+          if (details.velocity.pixelsPerSecond.dx > 500) {
             setState(() {
-              if(index != 5) {
+              if (index != 5) {
                 index = index + 1;
-              }else{
+              } else {
                 index = 0;
               }
             });
-          }else if(details.velocity.pixelsPerSecond.dx<-500){
+          } else if (details.velocity.pixelsPerSecond.dx < -500) {
             setState(() {
-              if(index != 0) {
+              if (index != 0) {
                 index = index - 1;
-              }else{
+              } else {
                 index = 5;
               }
             });
@@ -183,7 +221,8 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
                 hostAddress);
           } else {
             await SocketHelper.sendMessage(
-                MessageModel(orderType: MessageOrderType.type, message: keyLabel),
+                MessageModel(
+                    orderType: MessageOrderType.type, message: keyLabel),
                 hostAddress);
           }
         },
