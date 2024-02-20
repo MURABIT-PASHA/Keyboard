@@ -3,8 +3,6 @@ import 'package:keyboard/connection_provider.dart';
 import 'package:keyboard/empty_page.dart';
 import 'package:keyboard/keyboard_layout.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 void main() {
   runApp(const Keyboard());
