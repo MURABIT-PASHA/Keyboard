@@ -65,13 +65,10 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
               },
               icon: const Icon(Icons.private_connectivity_outlined),
             ),
-            IconButton(
-              onPressed: () {
-                //TODO: Open customize menu
-              },
-              icon: const Icon(Icons.settings),
-            ),
           ],
+        ),
+        drawer: Drawer(
+          //TODO: Open customize menu
         ),
         body: FutureBuilder<Map<String, dynamic>>(
           future: helper.getKeyboardLayout(locales[index]),

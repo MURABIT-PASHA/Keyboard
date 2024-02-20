@@ -62,13 +62,13 @@
 {"Shift": {}}
 ],
 "5. Satır": [
-{"Ctrl": {}},
-{"Win": {}},
-{"Alt": {}},
-{"Space": {"normal": " ", "shift": " ", "ctrl": " "}},
-{"AltGr": {}},
-{"Win": {}},
-{"Menu": {}},
-{"Ctrl": {}}
+  {"Ctrl": {}},
+  {"Fn": {}},
+  {"Win": {}},
+  {"Alt": {}},
+  {"Space": {"normal": " ", "shift": " ", "ctrl": " "}},
+  {"AltGr": {}},
+  {"Menu": {}},
+  {"Ctrl": {}}
 ]
 }
