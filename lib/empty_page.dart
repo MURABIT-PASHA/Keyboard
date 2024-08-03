@@ -38,7 +38,6 @@ class _EmptyPageState extends State<EmptyPage> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Keyboard"),
@@ -50,12 +49,12 @@ class _EmptyPageState extends State<EmptyPage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text("Scan QR"),
+                    title: const Text("Scan QR",textAlign: TextAlign.center,),
                     content: Container(
-                      width: width,
-                      height: width,
+                      width: 230,
+                      height: 230,
                       padding: const EdgeInsets.all(10),
-                      child: ScanDialog(size: width),
+                      child: const ScanDialog(),
                     ),
                   );
                 },

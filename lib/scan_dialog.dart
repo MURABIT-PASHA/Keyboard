@@ -1,15 +1,16 @@
 import 'dart:io';
+import 'package:dotlottie_loader/dotlottie_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard/connection_provider.dart';
 import 'package:keyboard/enums.dart';
 import 'package:keyboard/message_model.dart';
 import 'package:keyboard/socket_helper.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanDialog extends StatefulWidget {
-  final double size;
-  const ScanDialog({Key? key, required this.size}) : super(key: key);
+  const ScanDialog({Key? key}) : super(key: key);
 
   @override
   State<ScanDialog> createState() => _ScanDialogState();
@@ -37,14 +38,21 @@ class _ScanDialogState extends State<ScanDialog> {
     connectionStatus.checkHostAddress().then((value) => print(value));
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(20)),
-      child: Container(
-        height: widget.size,
-        width: widget.size,
-        padding: const EdgeInsets.all(10),
-        child: QRView(
-          key: qrKey,
-          onQRViewCreated: _onQRViewCreated,
-        ),
+      child: Stack(
+        children: [
+          QRView(
+            key: qrKey,
+            onQRViewCreated: _onQRViewCreated,
+          ),
+          DotLottieLoader.fromAsset("assets/lottie/qr-scanner.lottie",
+              frameBuilder: (BuildContext ctx, DotLottie? dotlottie) {
+                if (dotlottie != null) {
+                  return Lottie.memory(dotlottie.animations.values.single);
+                } else {
+                  return Container();
+                }
+              }),
+        ],
       ),
     );
   }

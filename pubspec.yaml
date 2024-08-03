@@ -39,6 +39,8 @@ dependencies:
   qr_code_scanner: ^1.0.1
   shared_preferences: ^2.2.2
   tutorial_coach_mark: ^1.2.11
+  dotlottie_loader: ^0.0.4
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +69,7 @@ flutter:
     - assets/icons/
     - assets/layouts/
     - assets/gif/
+    - assets/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

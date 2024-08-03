@@ -89,7 +89,11 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
                   color: Colors.red.shade900,
                   size: 75,
                 ),
-                const Text("Tema", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                const Text(
+                  "Tema",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
                 const Divider(
                   indent: 15,
                   endIndent: 15,
@@ -99,7 +103,8 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
                 Container(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   height: 100,
-                  child: const Text('Çok yakında sizlerle demek isterdim ama değil maalesef.\nYani daha ne yapayım ücretsiz, reklamsız uygulama işte.'),
+                  child: const Text(
+                      'Çok yakında sizlerle demek isterdim ama değil maalesef.\nYani daha ne yapayım ücretsiz, reklamsız uygulama işte.'),
                 ),
                 //TODO: Add theme here
                 const SizedBox(
@@ -217,7 +222,8 @@ class _KeyboardLayoutWidgetState extends State<KeyboardLayoutWidget> {
             await SocketHelper.sendMessage(
                 MessageModel(
                     orderType: MessageOrderType.type,
-                    message: "${specialKey.first}+$keyLabel"),
+                    message:
+                        "${specialKey.map((element) => '$element+').toString().replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replaceAll(',', '')}$keyLabel"),
                 hostAddress);
           } else {
             await SocketHelper.sendMessage(
